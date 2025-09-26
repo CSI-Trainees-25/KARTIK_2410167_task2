@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Task Manager</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Task Manager</h1>
+    <div class="task-inputs">
+      <input type="text" id="taskName" placeholder="Task Name" required />
+      <input type="number" id="taskDuration" placeholder="Duration (sec)" required />
+      <input type="datetime-local" id="taskDateTime" required />
+      <button class="btn-primary" id="addTask">Add Task</button>
+    </div>
+
+    <div class="task-list" id="taskList"></div>
+
+    <div class="controls">
+      <button class="btn-primary" id="startAll">Start All</button>
+    </div>
+
+    <div class="summary-page" id="summaryPage">
+      <h3>Summary</h3>
+      <ul id="summaryList"></ul>
+      <button class="btn-primary" onclick="location.reload()">Restart</button>
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

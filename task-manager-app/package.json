@@ -1,0 +1,22 @@
+{
+  "name": "task-manager-app",
+  "version": "1.0.0",
+  "description": "A responsive task manager application with drag-and-drop functionality, timer, and local storage persistence.",
+  "main": "src/script.js",
+  "scripts": {
+    "start": "live-server src"
+  },
+  "keywords": [
+    "task",
+    "manager",
+    "application",
+    "responsive",
+    "drag-and-drop",
+    "local-storage"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "live-server": "^1.2.1"
+  }
+}
