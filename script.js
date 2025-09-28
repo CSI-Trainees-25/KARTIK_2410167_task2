@@ -11,6 +11,7 @@ let addbtn = document.getElementById("add");
 let addtask = document.getElementById("addTask");
 let modal = document.getElementById("timerModal");
 
+
   function updateProgress() {
   let done = tasks.filter(t => t.completed).length + doNowTasks.filter(t => t.completed).length;
   let total = tasks.length + doNowTasks.length;
@@ -40,26 +41,26 @@ let tasklist = document.getElementById("taskList");
     const taskDiv = document.createElement("div");
     taskDiv.className = "task";
     taskDiv.innerHTML = `
-    <div class = "taskcontent">
-    <div class = "dotask-content" draggable="true" >
-      <div class="task-header">
-        <b>${task.name}</b>
-        <span style="font-size:0.9em; margin-right : 7rem ; color: red;">${task.priority}</span>
-      </div>
-      <div style="font-size:0.95em;">
-        <span>🗓️ Due date: ${task.date}</span>
-      </div>
-     
-      <div class="btns">
-        <button class="btn-complete" style="background-color: green; color: white">Complete</button>
-        <button class="btn-skip" style="background-color: red; color: white">Skip</button>
-        <button class="btn-donow" style="background-color: purple; color: white">Move to do now</button>
-      </div>
-      </div>
-      </div>
-    `;
+    <div class="taskcontent">
+      <div class="dotask-content" draggable="true" >
+        <div class="task-header">
+          <b>${task.name}</b>
+          <span style="font-size:0.9em; margin-right : 7rem ; color: red;">${task.priority}</span>
+        </div>
+        <div style="font-size:0.95em;">
+          <span>🗓️ Due date: ${task.date} , ${task.time}</span>
+        </div>
+       
+        <div class="btns">
+          <button class="btn-complete" style="background-color: green; color: white">Complete</button>
+          <button class="btn-skip" style="background-color: red; color: white">Skip</button>
+          <button class="btn-donow" style="background-color: purple; color: white">Move to do now</button>
+        </div>
+        </div>
+        </div>
+      `;
       if (task.completed) taskDiv.style.opacity = 0.5;
-      if (task.completed) alert("Task Completed!");
+      // if (task.completed) alert("Task Completed!");
     
     taskDiv.querySelector(".btn-donow").onclick = () => {
       doNowTasks.push({ ...task, completed: false });
@@ -74,7 +75,20 @@ let tasklist = document.getElementById("taskList");
       saveTasks();
       displayTasks();
        updateProgress();
+       checkAllCompleted();
     };
+    
+  const dragElem = taskDiv.querySelector(".dotask-content");
+  dragElem.addEventListener("dragstart", function(e) {
+    dragSrcType = "main";
+    dragSrcIdx = index;
+    e.dataTransfer.effectAllowed = "move";
+  });
+  dragElem.addEventListener("dragend", function(e) {
+    dragSrcType = null;
+    dragSrcIdx = null;
+  });
+
     tasklist.appendChild(taskDiv);
   });
 
@@ -87,6 +101,7 @@ let tasklist = document.getElementById("taskList");
       saveTasks();
       displayTasks();
        updateProgress();
+       displayDoNowTasks();
     };
   });
 }
@@ -105,7 +120,7 @@ function displayDoNowTasks() {
         <span style="font-size:0.9em; margin-right:7rem; color:purple;">${task.priority}</span>
       </div>
       <div style="font-size:0.95em;">
-        <span>🗓️ Due date: ${task.date}</span>
+        <span>🗓️ Due date: ${task.date} , ${task.time}</span>
       </div>
       
       <div class="btns">
@@ -132,17 +147,22 @@ function displayDoNowTasks() {
     if (task.completed)  updateProgress();
     
     taskDiv.querySelector(".btn-skip").onclick = () => {
+      tasks.push({ ...task, completed: false });
       doNowTasks.splice(index, 1);
       savedotasks();
       displayDoNowTasks();
         updateProgress();
+      saveTasks();
+      displayTasks();
       
     };
+    
       taskDiv.querySelector(".btn-complete").onclick = () => {
       doNowTasks[index].completed = true;
        savedotasks();
       displayDoNowTasks();
         updateProgress();
+        checkAllCompleted();
       
     };
 
@@ -183,8 +203,10 @@ function displayDoNowTasks() {
           countdown.style.color = "green";
          
           doNowTasks[index].completed = true;
+          startBtn.display.style = "none";
           savedotasks();
           displayDoNowTasks();
+          checkAllCompleted();
         }
       }, 1000);
     };
@@ -194,6 +216,18 @@ function displayDoNowTasks() {
 }
 
 
+
+ doNowList.ondragover = function(e) { e.preventDefault(); };
+  doNowList.ondrop = function(e) {
+    e.preventDefault();
+    if (dragSrcType === "main") {
+      let t = tasks.splice(dragSrcIdx, 1)[0];
+      doNowTasks.push(t);
+      saveTasks();
+      displayTasks();
+      displayDoNowTasks();
+    }
+  };
 
 function savedotasks() {
         localStorage.setItem("doNowTasks", JSON.stringify(doNowTasks));
@@ -206,17 +240,23 @@ function savedotasks() {
     }
 addtask.addEventListener("click", () => {
      const name = document.getElementById("taskName").value;
-      const date = document.getElementById("taskDateTime").value;
-      const time = document.getElementById("taskTime").value;
+      const dateTime = document.getElementById("taskDateTime").value;
+      let date = "";
+      let time = "";
+      if (dateTime) {
+        const dt = new Date(dateTime);
+        date = dt.toLocaleDateString();
+        time = dt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      }
       const priority = document.getElementById("taskPriority").value;
       
       
-      if (!name || !time || !date ) {
+      if (!name || !dateTime ) {
         alert("Please fill all fields!");
         return;
       }
 
-       tasks.push({ name, date, time, priority, completed: false });
+      tasks.push({ name, date, time, priority, completed: false });
 
       
       saveTasks();
@@ -231,6 +271,45 @@ addtask.addEventListener("click", () => {
       document.getElementById("taskDateTime").value = "";
       document.getElementById("taskTime").value = "";
     });
+
+    function checkAllCompleted() {
+  const allCompleted =
+    tasks.every(t => t.completed) &&
+    doNowTasks.every(t => t.completed) &&
+    (tasks.length + doNowTasks.length > 0);
+
+  if (allCompleted) {
+    showSummary();
+  }
+}
+
+function showSummary() {
+
+  document.querySelector(".container").style.display = "none";
+  document.querySelector(".progress").style.display = "none";
+
+  
+  summaryPage.style.display = "block";
+  summaryPage.innerHTML = "<h2>Summary</h2><ul id='summaryList'></ul>";
+
+  const allTasks = [
+    ...tasks.map(t => ({ ...t, type: "Task" })),
+    ...doNowTasks.map(t => ({ ...t, type: "Do Now" }))
+  ];
+
+  let totalExecutionTime = 0;
+  allTasks.forEach(task => {
+   
+    const li = document.createElement("li");
+    li.textContent = `${task.type}: ${task.name} | Priority: ${task.priority} | Due: ${task.date} ${task.time} | Status: Completed`;
+    summaryPage.querySelector("#summaryList").appendChild(li);
+  });
+
+  
+  const execDiv = document.createElement("div");
+  execDiv.textContent = "All tasks completed! (Execution time tracking can be added here)";
+  summaryPage.appendChild(execDiv);
+}
 
     
 displayTasks();

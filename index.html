@@ -31,14 +31,14 @@
           <button id="add">+</button>
         </div>
         <div style="display: flex; gap: 0.5rem;">
-            <span>0 Tasks |</span> <span>0 in progress |</span> <span> 0 Done</span>
+            <!-- <span>0 Tasks |</span> <span>0 in progress |</span> <span> 0 Done</span> -->
           <button class="btn-danger" id="endEarly" style="display:none;">END early</button>
         </div>
       </div>
       <div class="task-inputs" id="taskInputs" style="display:none;">
         <input type="text" id="taskName" placeholder="Task Name" />
-        <input type="date" id="taskDateTime" />
-        <input type="time" id="taskTime" />
+        <input type="datetime-local" id="taskDateTime" />
+        <!-- <input type="time" id="taskTime" /> -->
         <select id="taskPriority">
           <option value="High">High</option>
           <option value="Medium">Medium</option>
@@ -47,22 +47,23 @@
         <button class="btn-primary" id="addTask">Add Task</button>
       </div>
       <div class="task-list" id="taskList"></div>
-      <div class="summary-page" id="summaryPage">
-        <h3>Summary</h3>
-        <ul id="summaryList"></ul>
-        <button class="btn-primary" onclick="location.reload()">Restart</button>
-      </div>
+     
     </div>
-    <div style="flex: 1; min-width: 300px; border : 2px solid #6a0dad; padding : 1rem; border-radius : 12px;">
+    <div class = "donowbox" style="flex: 1; min-width: 300px; border : 2px solid #6a0dad; padding : 1rem; border-radius : 12px;">
       <div style="background:#6a0dad; color:white; border-radius:12px; padding:1rem; margin-bottom:1rem; border : 2px solid #4b006e;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom: 10px;">
           <b>Do Now.... <button style="background-color: green; color: white;" >Start all</button></b>
-          <span id="doNowCount" style="font-size:0.9em;">0/0</span>
+          <!-- <span id="doNowCount" style="font-size:0.9em;">0/0</span> -->
         </div>
         <div id="doNowList" style = "background-color: white;"></div>
       </div>
     </div>
   </div>
+   <div id="summaryPage" style ="display:none; text-align:center; margin-top:2rem;">
+        <h3>Summary</h3>
+        <ul id="summaryList"></ul>
+        <button class="btn-primary" onclick="location.reload()">Restart</button>
+      </div>
   
   <script src="script.js"></script>
 </body>
