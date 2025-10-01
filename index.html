@@ -36,9 +36,9 @@
         </div>
       </div>
       <div class="task-inputs" id="taskInputs" style="display:none;">
-        <input type="text" id="taskName" placeholder="Task Name" />
-        <input type="datetime-local" id="taskDateTime" />
-        <!-- <input type="time" id="taskTime" /> -->
+        Enter task name : <input type="text" id="taskName" placeholder="Task Name" />
+       Enter due date :  <input type="datetime-local" id="taskDateTime" placeholder /><br>
+         Enter duration for task : <input type="time" id="taskTime" />
         <select id="taskPriority">
           <option value="High">High</option>
           <option value="Medium">Medium</option>
@@ -52,8 +52,9 @@
     <div class = "donowbox" style="flex: 1; min-width: 300px; border : 2px solid #6a0dad; padding : 1rem; border-radius : 12px;">
       <div style="background:#6a0dad; color:white; border-radius:12px; padding:1rem; margin-bottom:1rem; border : 2px solid #4b006e;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom: 10px;">
-          <b>Do Now.... <button style="background-color: green; color: white;" >Start all</button></b>
-          <!-- <span id="doNowCount" style="font-size:0.9em;">0/0</span> -->
+          <b>Do Now..... 
+             <button id = "startAllBtn" style="background-color: green; color: white;" >Start all</button></b>
+          <span id="doNowCount" style="font-size:1.9em; margin-right : 2rem ; background-color: #a666d3">0/0</span>
         </div>
         <div id="doNowList" style = "background-color: white;"></div>
       </div>
@@ -61,6 +62,7 @@
   </div>
    <div id="summaryPage" style ="display:none; text-align:center; margin-top:2rem;">
         <h3>Summary</h3>
+        
         <ul id="summaryList"></ul>
         <button class="btn-primary" onclick="location.reload()">Restart</button>
       </div>
